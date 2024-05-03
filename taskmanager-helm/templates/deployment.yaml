@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "todo-app.fullname" . }}-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-client
+  template:
+    metadata:
+      labels:
+        app: todo-client
+    spec:
+      containers:
+        - name: todo-client
+          image: ghcr.io/lambrech-hsrt/demo-app-frontend:latest
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "todo-app.fullname" . }}-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-backend
+  template:
+    metadata:
+      labels:
+        app: todo-backend
+    spec:
+      containers:
+        - name: todo-backend
+          image: ghcr.io/lambrech-hsrt/demo-app-backend:latest
+          ports:
+            - containerPort: 5000
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "todo-app.fullname" . }}-mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-mongodb
+  template:
+    metadata:
+      labels:
+        app: todo-mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: ghcr.io/lambrech-hsrt/demo-app-mongodb:latest
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-credentials
+                  key: username
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-credentials
+                  key: password
+
