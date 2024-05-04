@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: taskmanager
+  name: helm-taskmananger
 spec:
   replicas: 1
   selector:
@@ -21,7 +21,7 @@ spec:
           ports:
             - containerPort: 80
 
-        - name: helm-todo-backend
+        - name: helm-taskmanager-backend
           image: ghcr.io/lambrech-hsrt/demo-app-backend:latest
           ports:
             - containerPort: 5000
