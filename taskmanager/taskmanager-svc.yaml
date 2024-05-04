@@ -26,18 +26,3 @@ spec:
       port: 8000
       targetPort: 5000
   type: LoadBalancer
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongodb-service
-spec:
-  selector:
-    app: todo-mongodb
-  ports:
-    - protocol: TCP
-      port: 27017
-      targetPort: 27017
-
