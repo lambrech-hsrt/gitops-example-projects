@@ -1,73 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
-  name: taskmanager-ui
+  name: taskmanager
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: todo-client
+      app: helm-taskmanager-app
+
   template:
     metadata:
       labels:
-        app: todo-client
+        app: helm-taskmanager-app
+
     spec:
       containers:
-        - name: todo-client
+        - name: helm-taskmanager-ui
           image: ghcr.io/lambrech-hsrt/demo-app-frontend:latest
           ports:
             - containerPort: 80
 
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: taskmanager-backend
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: todo-backend
-  template:
-    metadata:
-      labels:
-        app: todo-backend
-    spec:
-      containers:
-        - name: todo-backend
+        - name: helm-todo-backend
           image: ghcr.io/lambrech-hsrt/demo-app-backend:latest
           ports:
             - containerPort: 5000
-          readinessProbe:
-            tcpSocket:
-              port: 27017
-            initialDelaySeconds: 10
-            periodSeconds: 5
----
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: taskmananger-db
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: todo-mongodb
-  template:
-    metadata:
-      labels:
-        app: todo-mongodb
-    spec:
-      containers:
-        - name: mongodb
+        - name: helm-mongodb
           image: ghcr.io/lambrech-hsrt/demo-app-mongodb:latest
           ports:
             - containerPort: 27017
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
-              value: "admin"
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-credentials
+                  key: username
             - name: MONGO_INITDB_ROOT_PASSWORD
-              value: "admin"
-
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-credentials
+                  key: password

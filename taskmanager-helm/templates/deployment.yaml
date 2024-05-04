@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: {{ include "todo-app.fullname" . }}
 spec:
@@ -7,34 +8,36 @@ spec:
   selector:
     matchLabels:
       app: helm-taskmanager-app
+
   template:
     metadata:
       labels:
         app: helm-taskmanager-app
+
     spec:
       containers:
-        - name: {{ .Values.frontend.name }}
-          image: {{ printf "%s/%s" .Values.imageRegistry .Values.frontend.image }}
+        - name: helm-taskmanager-ui
+          image: ghcr.io/lambrech-hsrt/demo-app-frontend:latest
           ports:
-            - containerPort: {{ .Values.frontend.port }}
+            - containerPort: 80
 
-        - name: {{ .Values.backend.name }}
-          image: {{ printf "%s/%s" .Values.imageRegistry .Values.backend.image }}
+        - name: helm-taskmanager-backend
+          image: ghcr.io/lambrech-hsrt/demo-app-backend:latest
           ports:
-            - containerPort: {{ .Values.backend.port }}
+            - containerPort: 5000
 
-        - name: {{ .Values.mongodb.name }}
-          image: {{ printf "%s/%s" .Values.imageRegistry .Values.mongodb.image }}
+        - name: helm-mongodb
+          image: ghcr.io/lambrech-hsrt/demo-app-mongodb:latest
           ports:
-            - containerPort: {{ .Values.mongodb.port }}
+            - containerPort: 27017
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: mongodb-credentials
-                  key: {{ .Values.mongodbCredentials.usernameKey }}
+                  key: username
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mongodb-credentials
-                  key: {{ .Values.mongodbCredentials.passwordKey }}
+                  key: password
