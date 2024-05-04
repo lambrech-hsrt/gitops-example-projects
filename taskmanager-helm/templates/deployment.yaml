@@ -19,12 +19,12 @@ spec:
             - containerPort: {{ .Values.frontend.port }}
 
         - name: {{ .Values.backend.name }}
-          image: {{ printf "%s/%s" .Values.imageRegistry .Values.mongodb.image }}
+          image: {{ printf "%s/%s" .Values.imageRegistry .Values.backend.image }}
           ports:
             - containerPort: {{ .Values.backend.port }}
 
         - name: {{ .Values.mongodb.name }}
-          image: {{ printf "%s/%s" .Values.imageRegistry .Values.backend.image }}
+          image: {{ printf "%s/%s" .Values.imageRegistry .Values.mongodb.image }}
           ports:
             - containerPort: {{ .Values.mongodb.port }}
           env:

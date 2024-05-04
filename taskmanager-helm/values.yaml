@@ -7,7 +7,7 @@ frontend:
   image: demo-app-frontend:latest
 
 backend:
-  name: helm-todo-backend
+  name: helm-taskmanager-backend
   port: 5000
   image: demo-app-backend:latest
 
