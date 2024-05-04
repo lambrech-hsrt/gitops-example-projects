@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "todo-app.fullname" . }}-client-service
+  name: client-service
 spec:
   selector:
     app: todo-app
@@ -17,7 +17,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "todo-app.fullname" . }}-backend-service
+  name: backend-service
 spec:
   selector:
     app: todo-app
