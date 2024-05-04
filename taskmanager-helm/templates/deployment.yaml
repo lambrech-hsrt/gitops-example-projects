@@ -1,74 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "todo-app.fullname" . }}-client
+  name: {{ include "todo-app.fullname" . }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: todo-client
+      app: helm-taskmanager-app
   template:
     metadata:
       labels:
-        app: todo-client
+        app: helm-taskmanager-app
     spec:
       containers:
-        - name: todo-client
-          image: ghcr.io/lambrech-hsrt/demo-app-frontend:latest
+        - name: {{ .Values.frontend.name }}
+          image: {{ printf "%s/%s" .Values.imageRegistry .Values.frontend.image }}
           ports:
-            - containerPort: 80
+            - containerPort: {{ .Values.frontend.port }}
 
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ include "todo-app.fullname" . }}-backend
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: todo-backend
-  template:
-    metadata:
-      labels:
-        app: todo-backend
-    spec:
-      containers:
-        - name: todo-backend
-          image: ghcr.io/lambrech-hsrt/demo-app-backend:latest
+        - name: {{ .Values.backend.name }}
+          image: {{ printf "%s/%s" .Values.imageRegistry .Values.backend.image }}
           ports:
-            - containerPort: 5000
----
+            - containerPort: {{ .Values.backend.port }}
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ include "todo-app.fullname" . }}-mongodb
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: todo-mongodb
-  template:
-    metadata:
-      labels:
-        app: todo-mongodb
-    spec:
-      containers:
-        - name: mongodb
-          image: ghcr.io/lambrech-hsrt/demo-app-mongodb:latest
+        - name: {{ .Values.mongodb.name }}
+          image: {{ printf "%s/%s" .Values.imageRegistry .Values.mongodb.image }}
           ports:
-            - containerPort: 27017
+            - containerPort: {{ .Values.mongodb.port }}
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: mongodb-credentials
-                  key: username
+                  key: {{ .Values.mongodbCredentials.usernameKey }}
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mongodb-credentials
-                  key: password
-
+                  key: {{ .Values.mongodbCredentials.passwordKey }}
