@@ -17,6 +17,6 @@ mongodb:
   image: demo-app-mongodb:latest
 
 mongodbCredentials:
-  usernameKey: username
-  passwordKey: password
+  usernameKey: YWRtaW4=
+  passwordKey: YWRtaW4=
 
