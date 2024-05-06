@@ -8,8 +8,8 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: {{ .Values.frontend.port }}
+      targetPort: {{ .Values.frontend.port }}
       nodePort: 30000
 
 ---
@@ -23,6 +23,6 @@ spec:
     app: todo-app
   ports:
     - protocol: TCP
-      port: 8000
+      port: {{ .Values.backend.port }}
       targetPort: 5000
   type: LoadBalancer
