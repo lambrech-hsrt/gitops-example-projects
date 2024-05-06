@@ -3,7 +3,7 @@ imageRegistry: ghcr.io/lambrech-hsrt
 
 frontend:
   name: helm-taskmanager-ui
-  port: 80
+  port: 10000
   image: demo-app-frontend:latest
 
 backend:
