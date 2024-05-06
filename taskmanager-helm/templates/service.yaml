@@ -4,7 +4,7 @@ metadata:
   name: {{ include "todo-app.fullname" . }}-client-service
 spec:
   selector:
-    app: todo-app
+    app: taskmanager
   type: LoadBalancer
   ports:
     - protocol: TCP
@@ -20,9 +20,9 @@ metadata:
   name: {{ include "todo-app.fullname" . }}-backend-service
 spec:
   selector:
-    app: todo-app
+    app: taskmanager
   ports:
     - protocol: TCP
       port: {{ .Values.backend.port }}
-      targetPort: 5000
+      targetPort: {{ .Values.backend.port }}
   type: LoadBalancer
